@@ -27,6 +27,21 @@ function TodoList() {
     }
   };
 
+  const onHandleClick = (id) => {
+    setTodos(() => {
+      const newTodos = [...todos];
+      let [todo] = newTodos.filter((todo) => todo.id === id);
+      const index = newTodos.indexOf(todo);
+      todo = {
+        ...todo,
+        done: !todo.done,
+      };
+      console.log('todo', todo);
+      newTodos[index] = todo;
+      return newTodos;
+    });
+  };
+
   return (
     <React.Fragment>
       <h1>Todo List:</h1>
@@ -40,7 +55,13 @@ function TodoList() {
       </div>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.name}</li>
+          <li
+            className={todo.done === true ? 'done' : ''}
+            key={todo.id}
+            onClick={() => onHandleClick(todo.id)}
+          >
+            {todo.name}
+          </li>
         ))}
       </ul>
     </React.Fragment>
