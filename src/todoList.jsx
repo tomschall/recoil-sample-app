@@ -42,9 +42,18 @@ function TodoList() {
     });
   };
 
-  return (
-    <React.Fragment>
-      <h1>Todo List:</h1>
+  const onHandleDelete = (id) => {
+    setTodos(() => {
+      const newTodos = [...todos];
+      let [todo] = newTodos.filter((todo) => todo.id === id);
+      const index = newTodos.indexOf(todo);
+      newTodos.splice(index, 1);
+      return newTodos;
+    });
+  };
+
+  const renderInput = () => {
+    return (
       <div>
         <input
           type="text"
@@ -53,17 +62,43 @@ function TodoList() {
           onKeyDown={onHandleKeyDown}
         />
       </div>
+    );
+  };
+
+  const renderTodos = () => {
+    if (!todos.length) {
+      return (
+        <ul>
+          <li>all done - drink some beer and enjoy your day...</li>
+        </ul>
+      );
+    }
+    return (
       <ul>
         {todos.map((todo) => (
-          <li
-            className={todo.done === true ? 'done' : ''}
-            key={todo.id}
-            onClick={() => onHandleClick(todo.id)}
-          >
-            {todo.name}
+          <li>
+            <span
+              className={todo.done === true ? 'todo done' : 'todo'}
+              key={todo.id}
+              onClick={() => onHandleClick(todo.id)}
+            >
+              {todo.name}
+            </span>
+            <span>{'   '}</span>
+            <span className="todo" onClick={() => onHandleDelete(todo.id)}>
+              x
+            </span>
           </li>
         ))}
       </ul>
+    );
+  };
+
+  return (
+    <React.Fragment>
+      <h1>Todo List:</h1>
+      {renderInput()}
+      {renderTodos()}
     </React.Fragment>
   );
 }
